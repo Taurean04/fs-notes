@@ -3,8 +3,10 @@ const cors = require('cors');
 const app = express();
 
 const PORT = process.env.PORT || 3002;
-app.use(express.json())
+app.use(express.json());
 app.use(cors());
+app.use(express.static('build'));
+
 let notes = [
   {
     id: 1,
@@ -26,10 +28,6 @@ let notes = [
   }
 ];
 
-// const app = http.createServer((req, res) => {    
-//   res.writeHead(200, { 'Content-Type': 'text/plain' })
-//   res.end(JSON.stringify(notes))
-// });
 const requestLogger = (req, res, next) => {
   console.log('Method:', req.method);
   console.log('Path:  ', req.path);
@@ -42,7 +40,6 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(requestLogger);
-// app.use(unknownEndpoint);
 
 app.get('/', (req, res) => res.send('<h1>Hello World</h1>'));
 
@@ -84,7 +81,14 @@ app.post('/api/notes', (req, res) => {
 })
 
 
+app.use(unknownEndpoint);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+// const app = http.createServer((req, res) => {    
+//   res.writeHead(200, { 'Content-Type': 'text/plain' })
+//   res.end(JSON.stringify(notes))
+// });
 
 // app.listen(PORT);
 // console.log(`Server running on port ${PORT}`)
